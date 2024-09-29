@@ -1,5 +1,7 @@
 import pytest
 import main
+import numpy as np
+
 
 def func(original_val, input_val):
     if input_val:
@@ -9,6 +11,11 @@ def func(original_val, input_val):
             return original_val ^ 1
         else:
             return original_val
+
+
+@pytest.fixture
+def get_image():
+    return np.zeros((50, 50, 3), dtype=np.uint8).ravel()
 
 
 @pytest.mark.parametrize(
@@ -30,3 +37,17 @@ def func(original_val, input_val):
 def test_bitvalues(original, input, expected):
     actual = main.encode_value(original, input)
     assert actual == expected, "Mismatch found"
+
+
+@pytest.mark.parametrize("string_to_hide", ["Hello World", "Hello", ""])
+def test_encode_decode(get_image, string_to_hide):
+    print(get_image)
+    main.decode_data_from_image(
+        main.encode_data_to_image(get_image, string_to_hide)
+    ) == string_to_hide
+
+
+def test_raises_value_error(get_image):
+    s = "abcd" * 7600
+    with pytest.raises(ValueError):
+        main.encode_data_to_image(get_image, s)
