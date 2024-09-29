@@ -3,16 +3,6 @@ import main
 import numpy as np
 
 
-def func(original_val, input_val):
-    if input_val:
-        return original_val | input_val
-    else:
-        if original_val & 1:
-            return original_val ^ 1
-        else:
-            return original_val
-
-
 @pytest.fixture
 def get_image():
     return np.zeros((50, 50, 3), dtype=np.uint8).ravel()
@@ -39,7 +29,9 @@ def test_bitvalues(original, input, expected):
     assert actual == expected, "Mismatch found"
 
 
-@pytest.mark.parametrize("string_to_hide", ["Hello World", "Hello", ""])
+@pytest.mark.parametrize(
+    "string_to_hide", ["Helllllllllllooooooooooo Worldddddddddd", "Hello", "a", ""]
+)
 def test_encode_decode(get_image, string_to_hide):
     print(get_image)
     main.decode_data_from_image(
