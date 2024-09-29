@@ -1,7 +1,7 @@
 import imageIO
 import logging
 import numpy as np
-
+import argparse
 logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.DEBUG)
 log = logging.getLogger()
 
@@ -74,7 +74,7 @@ def main_encode_image(input_image):
     flat_image = convert_img_to_1d_arr(input_image)
     log.info(f"flat_image image size= {flat_image.shape}")
 
-    log.info(f"You can hide at most {input_image.shape[0]//8} characters")
+    log.info(f"You can hide at most {flat_image.shape[0]//8} characters")
     string_to_hide = input("Enter the data to be hidden: ")
 
     flat_output_image = encode_data_to_image(flat_image, string_to_hide)
@@ -94,5 +94,18 @@ def main_decode_image(input_image):
 if __name__ == "__main__":
     # input_image = imageIO.read_image("DSCN0982.png")
     # main_encode_image(input_image)
-    input_image = imageIO.read_image("encoded_image.png")
-    main_decode_image(input_image)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--encode",action=argparse.BooleanOptionalAction)
+    parser.add_argument("--decode",action=argparse.BooleanOptionalAction)
+    parser.add_argument("--image")
+    args = parser.parse_args()
+    if args.encode:
+        img = args.image or "DSCN0982.png"
+        input_image = imageIO.read_image(img)
+        main_encode_image(input_image)
+    elif args.decode:
+        img = args.image or "encoded_image.png"
+        input_image = imageIO.read_image("encoded_image.png")
+        main_decode_image(input_image)
+    else:
+        print("Invalid input")
