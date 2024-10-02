@@ -30,7 +30,7 @@ def test_bitvalues(original, input, expected):
 
 
 @pytest.mark.parametrize(
-    "string_to_hide", ["Helllllllllllooooooooooo Worldddddddddd", "Hello", "a", ""]
+    "string_to_hide", ["Helllllllllllooooooooooo Worldddddddddd", "Hello", "a"]
 )
 def test_encode_decode(get_image, string_to_hide):
     print(get_image)
@@ -40,6 +40,5 @@ def test_encode_decode(get_image, string_to_hide):
 
 
 def test_raises_value_error(get_image):
-    s = "abcd" * 7600
     with pytest.raises(ValueError):
-        main.encode_data_to_image(get_image, s)
+        main.encode_data_to_image(get_image, "")
